@@ -2,8 +2,8 @@
   "name": "@claudiu/expo-mixpanel-analytics",
   "version": "0.1.7",
   "description": "Mixpanel integration for use with React Native apps built on Expo.",
-  "main": "dist/src/index.ts",
-  "types": "dist/src/index.d.ts",
+  "main": "/src/index.ts",
+  "types": "/src/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
