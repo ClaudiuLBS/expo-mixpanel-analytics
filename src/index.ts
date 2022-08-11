@@ -1,12 +1,12 @@
-import { Platform, Dimensions, AsyncStorage } from "react-native";
-import Constants from "expo-constants";
-import { Buffer } from "buffer";
+import { Platform, Dimensions, AsyncStorage } from 'react-native';
+import Constants from 'expo-constants';
+import { Buffer } from 'buffer';
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
-const MIXPANEL_API_URL = "https://api.mixpanel.com";
-const ASYNC_STORAGE_KEY = "mixpanel:super:props";
-const isIosPlatform = Platform.OS === "ios";
+const MIXPANEL_API_URL = 'https://api.mixpanel.com';
+const ASYNC_STORAGE_KEY = 'mixpanel:super:props';
+const isIosPlatform = Platform.OS === 'ios';
 
 export class ExpoMixpanelAnalytics {
   ready = false;
@@ -35,7 +35,7 @@ export class ExpoMixpanelAnalytics {
     this.osVersion = Platform.Version;
     this.superProps;
 
-    Constants.getWebViewUserAgentAsync().then(userAgent => {
+    Constants.getWebViewUserAgentAsync().then((userAgent) => {
       this.userAgent = userAgent;
       this.appName = Constants.manifest.name;
       this.appId = Constants.manifest.slug;
@@ -46,7 +46,7 @@ export class ExpoMixpanelAnalytics {
         this.platform = Constants.platform.ios.platform;
         this.model = Constants.platform.ios.model;
       } else {
-        this.platform = "android";
+        this.platform = 'android';
       }
 
       AsyncStorage.getItem(ASYNC_STORAGE_KEY, (_, result) => {
@@ -73,7 +73,7 @@ export class ExpoMixpanelAnalytics {
   track(name: string, props?: any) {
     this.queue.push({
       name,
-      props
+      props,
     });
     this._flush();
   }
@@ -90,31 +90,31 @@ export class ExpoMixpanelAnalytics {
   }
 
   people_set(props) {
-    this._people("set", props);
+    this._people('set', props);
   }
 
   people_set_once(props) {
-    this._people("set_once", props);
+    this._people('set_once', props);
   }
 
   people_unset(props) {
-    this._people("unset", props);
+    this._people('unset', props);
   }
 
   people_increment(props) {
-    this._people("add", props);
+    this._people('add', props);
   }
 
   people_append(props) {
-    this._people("append", props);
+    this._people('append', props);
   }
 
   people_union(props) {
-    this._people("union", props);
+    this._people('union', props);
   }
 
   people_delete_user() {
-    this._people("delete", "");
+    this._people('delete', '');
   }
 
   // ===========================================================================================
@@ -132,7 +132,7 @@ export class ExpoMixpanelAnalytics {
     if (this.userId) {
       const data = {
         $token: this.token,
-        $distinct_id: this.userId
+        $distinct_id: this.userId,
       };
       data[`$${operation}`] = props;
 
@@ -145,8 +145,8 @@ export class ExpoMixpanelAnalytics {
       event: event.name,
       properties: {
         ...(event.props || {}),
-        ...this.superProps
-      }
+        ...this.superProps,
+      },
     };
     if (this.userId) {
       data.properties.distinct_id = this.userId;
@@ -169,13 +169,13 @@ export class ExpoMixpanelAnalytics {
       data.properties.os_version = this.osVersion;
     }
 
-    const buffer = new Buffer(JSON.stringify(data)).toString("base64");
+    const buffer = new Buffer(JSON.stringify(data)).toString('base64');
 
     return fetch(`${MIXPANEL_API_URL}/track/?data=${buffer}`);
   }
 
   _pushProfile(data) {
-    data = new Buffer(JSON.stringify(data)).toString("base64");
+    data = new Buffer(JSON.stringify(data)).toString('base64');
     return fetch(`${MIXPANEL_API_URL}/engage/?data=${data}`);
   }
 }
